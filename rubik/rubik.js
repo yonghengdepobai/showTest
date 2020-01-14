@@ -398,23 +398,23 @@ function main() {
             console.log('failed cubeProgram loaction'); return;
     }
 
-    var objProgram = createProgram(gl, CUBE_VSHADER_SOURCE, CUBE_FSHADER_SOURCE);
-    if (!objProgram) {console.log('failed cubeProgram'); return;};
+    // var objProgram = createProgram(gl, CUBE_VSHADER_SOURCE, CUBE_FSHADER_SOURCE);
+    // if (!objProgram) {console.log('failed cubeProgram'); return;};
 
-    objProgram.a_Position = gl.getAttribLocation(objProgram, 'a_Position');
-    objProgram.a_Normal = gl.getAttribLocation(objProgram, 'a_Normal');
-    objProgram.a_Color = gl.getAttribLocation(objProgram, 'a_Color');
-    objProgram.u_MvpMatrix = gl.getUniformLocation(objProgram, 'u_MvpMatrix');
-    objProgram.u_NormalMatrix = gl.getUniformLocation(objProgram, 'u_NormalMatrix');
-    objProgram.u_lightDirection = gl.getUniformLocation(objProgram, 'u_lightDirection');
-    objProgram.u_ShadowMap = gl.getUniformLocation(objProgram, 'u_ShadowMap');
-    objProgram.u_MvpMatrixFromLight = gl.getUniformLocation(objProgram, 'u_MvpMatrixFromLight');
+    // objProgram.a_Position = gl.getAttribLocation(objProgram, 'a_Position');
+    // objProgram.a_Normal = gl.getAttribLocation(objProgram, 'a_Normal');
+    // objProgram.a_Color = gl.getAttribLocation(objProgram, 'a_Color');
+    // objProgram.u_MvpMatrix = gl.getUniformLocation(objProgram, 'u_MvpMatrix');
+    // objProgram.u_NormalMatrix = gl.getUniformLocation(objProgram, 'u_NormalMatrix');
+    // objProgram.u_lightDirection = gl.getUniformLocation(objProgram, 'u_lightDirection');
+    // objProgram.u_ShadowMap = gl.getUniformLocation(objProgram, 'u_ShadowMap');
+    // objProgram.u_MvpMatrixFromLight = gl.getUniformLocation(objProgram, 'u_MvpMatrixFromLight');
 
-    if (objProgram.a_Position < 0 || objProgram.a_Color < 0 || objProgram.a_Normal < 0 ||
-        objProgram.u_MvpMatrix < 0 || objProgram.u_NormalMatrix < 0 || objProgram.u_ShadowMap < 0
-     || objProgram.u_MvpMatrixFromLight < 0) {
-            console.log('failed objProgram loaction'); return;
-    }
+    // if (objProgram.a_Position < 0 || objProgram.a_Color < 0 || objProgram.a_Normal < 0 ||
+    //     objProgram.u_MvpMatrix < 0 || objProgram.u_NormalMatrix < 0 || objProgram.u_ShadowMap < 0
+    //  || objProgram.u_MvpMatrixFromLight < 0) {
+    //         console.log('failed objProgram loaction'); return;
+    // }
 
     var shadowProgram = createProgram(gl, SHADOW_VSHADER_SOURCE, SHADOW_FSHADER_SOURCE);
     if (!shadowProgram) {console.log('falied shadowProgram'); return;}
@@ -438,9 +438,9 @@ function main() {
     var fbo = initFramebufferObject(gl);
     if (!fbo) {console.log('failed fbo'); return};
 
-    var iObj = importObj(gl, objProgram);
-    if (!iObj) {return}
-    readOBJFile('../webGL/WebGL_Guide_Code/ch10/cube.obj', gl, iObj, 60, true);
+    // var iObj = importObj(gl, objProgram);
+    // if (!iObj) {return}
+    // readOBJFile('../webGL/WebGL_Guide_Code/ch10/cube.obj', gl, iObj, 60, true);
 
     gl.activeTexture(gl.TEXTURE0); // 激活指定纹理单元
     gl.bindTexture(gl.TEXTURE_2D, fbo.texture);
