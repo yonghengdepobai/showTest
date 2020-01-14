@@ -485,8 +485,8 @@ function main() {
 
         // gl.viewport(0, 0, canvas.width, canvas.height);
         // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        gl.useProgram(objProgram);
-        drawObj(gl, objProgram, iObj, viewProjMatrix);
+        // gl.useProgram(objProgram);
+        // drawObj(gl, objProgram, iObj, viewProjMatrix);
         // gl.uniformMatrix4fv(cubeProgram.u_MvpMatrix, false, mvpMatrix_Light_p.elements);
         // drawPlane(gl, cubeProgram, plane, viewProjMatrix);
         requestAnimationFrame(tick, canvas);
