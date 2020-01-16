@@ -1,0 +1,244 @@
+<html !Doctype>
+    <head>
+        <title>小飞机</title>
+        <style>
+            canvas {
+                background: black;
+            }
+        </style>
+    </head>
+    <body>
+        <canvas id='planeC' width="1000", height="1000"></canvas>
+        <script>
+            const canvas = document.getElementById('planeC');
+            const ctx = canvas.getContext('2d');
+            const PI = Math.PI;
+            var isDraw = false;
+            var bulletList = [];
+            class Control {
+                ourR = 60;
+                inR = 40;
+                // yR = 10;
+                constructor() {
+                }
+                drawControl(ctx) {
+                    if (!isDraw) {return;}
+                    ctx.save();
+                    ctx.strokeStyle = 'cyan';
+                    ctx.beginPath();
+                    ctx.lineWidth = 2;
+                    ctx.arc(this.px, this.py, this.ourR, 0, 2 * PI);
+                    ctx.stroke();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.lineWidth = 6;
+                    ctx.arc(this.px, this.py, this.inR, 0, 2 * PI);
+                    ctx.stroke();
+                    ctx.closePath();
+
+                    ctx.beginPath();
+                    ctx.lineWidth = 2;
+                    ctx.arc(this.mx, this.my, this.inR, 0, 2 * PI);
+                    ctx.stroke();
+                    ctx.closePath();
+                    ctx.restore();
+                    
+                }
+                drawLine(ctx) {
+                    ctx.save();
+                    ctx.strokeStyle = '#cdcdcd';
+                    ctx.moveTo(0, 100);
+                    ctx.lineTo(1000, 100);
+                    ctx.moveTo(0, 200);
+                    ctx.lineTo(1000, 200);
+                    ctx.stroke();
+                    ctx.restore();
+                }
+                setCoord(x, y) {
+                    this.px = x;
+                    this.py = y;
+                }
+                setNCoord(x, y) {
+                    this.mx = x;
+                    this.my = y;
+                }
+                get getCoord() {
+                    return {cx: this.px, cy: this.py};
+                }
+            }
+
+            class Plane { // 小飞机 两个三角形
+                px = 100; // 飞机x坐标
+                py = 100; // 飞机y坐标
+                speed = 0; // 飞行速度
+                width = 10; height = 25;  swidth = 2; sheight = 5;
+                angle = 0;
+                constructor() {
+                }
+                /** 
+                 * 设置飞机坐标
+                */
+                setCoord(x, y) {
+                    if (x < 0) { x += 1000;}
+                    if (y < 0) {y += 1000;}
+                    this.px = x % 1000;
+                    this.py = y % 1000;
+                }
+                get getCoord() {
+                    return {
+                        x: this.px,
+                        y: this.py,
+                    }
+                }
+                setAngle(angle) {
+                    this.angle = angle;
+                }
+                get getAngle() {
+                    return this.angle;
+                }
+                /** 
+                 * 绘制飞机
+                 * @ctx canvas上下文
+                 * @x 飞机顶点x坐标
+                */
+                drawPlane(ctx) {
+                    // let upx = (x - this.height), upy = y + this.width;
+                    // let downx = x - this.height, downy = y - this.width;
+                    // {upx, upy} = this.setRoute(upx, upy);
+                    // console.log(this.px, this.py);
+                    ctx.save();
+                    ctx.strokeStyle = '#fff';
+                    ctx.translate(this.px, this.py);
+                    ctx.rotate((this.angle) * Math.PI / 180);
+                    ctx.beginPath();
+                    ctx.moveTo(-15, -10)
+                    ctx.lineTo(-15, 10)
+                    ctx.lineTo(10, 0)
+                    // ctx.lineTo(this.width * 2, this.height);
+                    // ctx.lineTo(-this.width, this.height);
+                    ctx.closePath();
+                    ctx.stroke();
+                    ctx.restore();
+                }
+                setRoute(x, y) {
+                    let dx = x - (x * Math.cos(this.angle * Math.PI / 180));
+                    let dy = y - (x * Math.sin(this.angle * Math.PI / 180));
+                    return {dx, dy};
+                }
+            }
+            
+            class Bullet {
+                speed = 500;
+                sTime = Date.now();
+                constructor(x, y, angle) {
+                    this.x = x;
+                    this.y = y;
+                    this.angle = angle;
+                }
+                draw(ctx) {
+                    // console.log(this.angle);
+                    let t = (Date.now() - this.sTime) / 1000 * this.speed; 
+                    let px = t * Math.cos(this.angle * PI / 180);
+                    let py = t * Math.sin(this.angle * PI / 180);
+                    // let px = this.x, py = this.y;
+                    // console.log(px, py);
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.strokeStyle = 'red';
+                    ctx.translate(this.x, this.y);
+                    // ctx.moveTo(-15, -10);
+                    ctx.arc(px, py, 2, 0, 2 * PI);
+                    // ctx.arc(this.px, this.py, this.inR, 0, 2 * PI);
+                    ctx.closePath();
+                    ctx.stroke();
+                    ctx.restore();
+                }
+                isDel() {
+                    let t = (Date.now() - this.sTime) / 1000 * this.speed;
+                    if (t > 1000) {
+                        return true;
+                    }
+                    return false;
+                }
+
+            }
+            
+            const control = new Control();
+            canvas.addEventListener('mousedown', function(e) {
+                // console.log(e);
+                isDraw = true;
+                control.setCoord(e.layerX, e.layerY);
+                control.setNCoord(e.layerX, e.layerY);
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);  
+                control.drawControl(ctx, e.layerX, e.layerY);
+            });
+            canvas.addEventListener('mousemove', function(e) {
+                // console.log(e);
+                if (isDraw) {
+                    // ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    control.setNCoord(e.layerX, e.layerY);
+                    // 计算 摇杆的方向和速度
+                    let {cx, cy} = control.getCoord;
+                    // console.log(cx, cy);
+                    let x = e.layerX - cx, y = e.layerY - cy;
+                    let speed = Math.min(Math.sqrt(x * x + y*y), 499); // 最大小499
+                    // console.log(speed);
+                    plane.speed = speed / 10;
+                    let tan, angle;
+                    if (y === 0) {
+                        tan = 90;
+                    } else {tan = x / y}
+                    angle = Math.atan(tan) / PI * 180;
+                    if (y < 0) {angle = angle + 180}
+                    plane.setAngle(-(angle - 90));
+                }
+            });
+            canvas.addEventListener('mouseup', function(e) {
+                isDraw = false;
+                // ctx.clearRect(0, 0, canvas.width, canvas.height);
+            });
+            window.addEventListener('keydown', function(e) {
+                // console.log(e);
+                let {x, y} = plane.getCoord;
+                // console.log(x, y);
+                let bullet = new Bullet(x, y, plane.angle);
+                bulletList.push(bullet);
+                // console.log(bulletList);
+            })
+            var plane = new Plane();
+            window.onload = function() {
+                plane.drawPlane(ctx, 100, 200);
+            }
+             var plane = new Plane(50, 50);
+            function drawP() {
+                // console.log('????');
+                requestAnimationFrame(drawP);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let {x, y} = plane.getCoord;
+                // if (plane.speed !== 0) {
+                    x = x + plane.speed * (Math.cos(plane.angle * PI / 180));
+                    y = y + plane.speed * (Math.sin(plane.angle * PI / 180));
+                // }
+                
+                if (x !== x) {
+                    // console.log(plane.speed, plane.angle, Math.cos(plane.angle * PI / 180));
+                    throw new Error(plane.speed, plane.angle, Math.cos(plane.angle * PI / 180));
+                }
+                // console.log(x,y, 'set');
+                plane.setCoord(x, y);
+                plane.drawPlane(ctx);
+                for(b in bulletList) {
+                    bulletList[b].draw(ctx);
+                    if (bulletList[b].isDel()) {bulletList[b] = null; bulletList.splice(b, 1)}
+                }
+                control.drawControl(ctx);
+                // control.drawLine(ctx);
+                
+            }
+            drawP();
+
+
+        </script>
+    </body>
+</html>
