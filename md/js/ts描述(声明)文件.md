@@ -16,7 +16,7 @@ declare module // 扩展模块
 ```
 
 ### 什么是声明语句
-假如我们想使用第三方库jQuery,一种常的方式是在html中通过<script>标签引入jQurey，然后就可以使用$或jQurey了
+假如我们想使用第三方库jQuery,一种常的方式是在html中通过<script_>标签引入jQurey，然后就可以使用$或jQurey了
 我们通常这样获取一个id是foo的元素
 ```js
 $('#foo')
@@ -69,17 +69,17 @@ jQuery('#foo');
 
 库的使用场景主要以下几种：
 ```
-    全局变量：通过<script>标签引入第三方库，注入全局变量；
+    全局变量：通过<script_>标签引入第三方库，注入全局变量；
     npm包：通过 import foo from 'foo' 导入，符合ES6模块规范
-    UMD库：即可以通过<script>标签引入，又可以通过import导入
-    直接扩展全局变量：通过<script> 标签引入后，改变一个全局变量的结构
+    UMD库：即可以通过<script_>标签引入，又可以通过import导入
+    直接扩展全局变量：通过<script_> 标签引入后，改变一个全局变量的结构
     在npm包或UMD库中扩展全局变量：引用npm包或UMD库后，改变一个全局变量的结构
     模块插件：通过<scritp>或import导入后，改变一个模块构量
 
 ```
 
 ### 全局变量
-全局变量是最简单的的一种场景，之前举的例子就是通过<script>标签引入
+全局变量是最简单的的一种场景，之前举的例子就是通过<script_>标签引入
 
 使用全局变量的声明文件时，如果是 npm install @type/xxx 安装的，则不需要任何配置。
 如果将声明文件直接存放于当前项目中，则建议和其他源码一起放到src目录下（或者对应的源码目录下）
@@ -468,7 +468,7 @@ export = 都是ts为了兼容ADM规范和commonjs规范而创立的新语法
 
 ## UMD库
 
-既可以通过<script>标签引入，又可以通过import 导入的库，称为UMD库
+既可以通过<script_>标签引入，又可以通过import 导入的库，称为UMD库
 相比于npm包的类型声明文件，我们需要额外声明一个全局变量，为了实现这种方式，ts提供了一个新语法 export as namespace
 
 ### export as namespace
